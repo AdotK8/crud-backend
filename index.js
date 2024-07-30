@@ -1,5 +1,7 @@
 const express = require("express");
-const { connectDB } = require("./db");
+const connectDB = require("./config/db");
+
+const developmentRoutes = require("./routes/developmentRoutes");
 
 const app = express();
 
@@ -19,3 +21,5 @@ connectDB()
       error
     );
   });
+
+app.use(developmentRoutes);
