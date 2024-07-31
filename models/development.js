@@ -14,11 +14,13 @@ const developmentSchema = new mongoose.Schema(
       type: String,
       maxlength: 350,
       minlength: 100,
+      default: "",
     },
     copy2: {
       type: String,
       maxlength: 350,
       minlength: 100,
+      default: "",
     },
     features: {
       type: [String],
@@ -28,9 +30,11 @@ const developmentSchema = new mongoose.Schema(
     },
     nearestStation: {
       type: String,
+      default: "",
     },
     nearestStationDistance: {
       type: Number,
+      default: "",
     },
     images: {
       type: [String],
