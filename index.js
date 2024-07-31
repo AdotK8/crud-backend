@@ -1,11 +1,12 @@
 const express = require("express");
 const connectDB = require("./config/db");
-
+const cors = require("cors");
 const developmentRoutes = require("./routes/developmentRoutes");
 
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 const port = process.env.PORT || 3000;
 
@@ -22,4 +23,4 @@ connectDB()
     );
   });
 
-app.use(developmentRoutes);
+app.use("/api", developmentRoutes);
