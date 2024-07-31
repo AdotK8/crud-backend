@@ -12,9 +12,13 @@ const developmentSchema = new mongoose.Schema(
     },
     copy1: {
       type: String,
+      maxlength: 350,
+      minlength: 100,
     },
     copy2: {
       type: String,
+      maxlength: 350,
+      minlength: 100,
     },
     features: {
       type: [String],
@@ -29,12 +33,7 @@ const developmentSchema = new mongoose.Schema(
       type: Number,
     },
     images: {
-      image1: {
-        type: String,
-      },
-      image2: {
-        type: String,
-      },
+      type: [String],
     },
     zone: {
       type: Number,
@@ -86,7 +85,46 @@ const developmentSchema = new mongoose.Schema(
         },
       },
     },
+    postcode: {
+      type: String,
+      required: true,
+    },
+    developer: {
+      type: String,
+      required: true,
+    },
+    cardinalLocation: {
+      type: String,
+      required: true,
+    },
+    fee: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+    contactEmail: {
+      type: String,
+      match: [/.+\@.+\..+/, "Please fill a valid email address"],
+      required: true,
+    },
+    completion: {
+      type: mongoose.Schema.Types.Mixed,
+      required: true,
+      validate: {
+        validator: function (v) {
+          return typeof v === "number" || v === "completed";
+        },
+        message: (props) => `${props.value} is not a valid completion value!`,
+      },
+    },
+
+    createdAt: {
+      type: Date,
+      immutable: true,
+      default: Date.now(),
+    },
   },
+
   {
     timestamps: true,
   }
