@@ -13,13 +13,11 @@ const developmentSchema = new mongoose.Schema(
     copy1: {
       type: String,
       maxlength: 350,
-      minlength: 100,
       default: "",
     },
     copy2: {
       type: String,
       maxlength: 350,
-      minlength: 100,
       default: "",
     },
     features: {
@@ -56,6 +54,7 @@ const developmentSchema = new mongoose.Schema(
         priceFrom: {
           type: Number,
           required: true,
+          default: 0,
         },
       },
       twoBed: {
