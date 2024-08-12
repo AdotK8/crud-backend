@@ -18,7 +18,17 @@ exports.getDevelopments = async (req, res) => {
     const developments = await Development.find({});
     res.status(200).json(developments);
   } catch (error) {
-    res.status(500).send("Error fetching development: " + error.message);
+    res.status(500).send("Error fetching developments: " + error.message);
     //impement this error in frontend
+  }
+};
+
+exports.getOneDevelopment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const development = await Development.findById(id).exec();
+    res.status(200).json(development);
+  } catch (error) {
+    res.status(500).send("Error fetching development: " + error.message);
   }
 };
