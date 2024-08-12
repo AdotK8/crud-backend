@@ -1,4 +1,5 @@
 const Development = require("../models/development");
+const mongoose = require("mongoose");
 
 exports.createDevelopment = async (req, res) => {
   req.body.zone = Number(req.body.zone);
@@ -10,6 +11,36 @@ exports.createDevelopment = async (req, res) => {
     res.status(201).send(development);
   } catch (error) {
     res.status(400).send("Error creating development: " + error.message);
+  }
+};
+
+exports.editDevelopment = async (req, res) => {
+  console.log(req.body);
+
+  const { _id, ...updateFields } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(_id)) {
+    return res.status(400).json({ message: "Invalid ID format" });
+  }
+
+  updateFields.zone = Number(updateFields.zone);
+  updateFields.fee = Number(updateFields.fee);
+
+  try {
+    const updatedDevelopment = await Development.findByIdAndUpdate(
+      _id,
+      updateFields,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedDevelopment) {
+      return res.status(404).json({ message: "Development not found" });
+    }
+
+    res.status(200).json(updatedDevelopment);
+  } catch (error) {
+    console.error("Error updating development:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
