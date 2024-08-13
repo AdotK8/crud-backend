@@ -63,3 +63,25 @@ exports.getOneDevelopment = async (req, res) => {
     res.status(500).send("Error fetching development: " + error.message);
   }
 };
+
+exports.deleteDevelopment = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid ID format." });
+    }
+
+    const result = await Development.findByIdAndDelete(id);
+
+    if (!result) {
+      return res.status(404).json({ error: "Development not found." });
+    }
+
+    res.status(200).json({ message: "Development deleted successfully." });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Error deleting development: " + error.message });
+  }
+};
