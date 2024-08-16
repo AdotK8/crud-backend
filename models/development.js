@@ -38,6 +38,15 @@ const developmentSchema = new mongoose.Schema(
     images: {
       type: [String],
     },
+
+    brochures: {
+      type: [String],
+      required: true,
+    },
+
+    priceLists: {
+      type: [String],
+    },
     zone: {
       type: Number,
       required: true,
@@ -112,14 +121,8 @@ const developmentSchema = new mongoose.Schema(
       required: true,
     },
     completion: {
-      type: mongoose.Schema.Types.Mixed,
       required: true,
-      validate: {
-        validator: function (v) {
-          return typeof v === "number" || v === "completed";
-        },
-        message: (props) => `${props.value} is not a valid completion value!`,
-      },
+      type: String,
     },
 
     createdAt: {
