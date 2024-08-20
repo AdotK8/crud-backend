@@ -33,7 +33,7 @@ const developmentSchema = new mongoose.Schema(
     },
     nearestStationDistance: {
       type: Number,
-      default: "",
+      default: null,
     },
     images: {
       type: [String],
@@ -44,9 +44,19 @@ const developmentSchema = new mongoose.Schema(
       required: true,
     },
 
-    priceLists: {
-      type: [String],
-    },
+    priceLists: [
+      {
+        url: {
+          type: String,
+          required: true,
+        },
+        lastUpdated: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+
     zone: {
       type: Number,
       required: true,
@@ -96,6 +106,10 @@ const developmentSchema = new mongoose.Schema(
           type: Number,
           required: true,
         },
+      },
+      lastUpdated: {
+        type: Date,
+        default: Date.now,
       },
     },
     postcode: {
