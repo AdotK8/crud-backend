@@ -30,10 +30,12 @@ const developmentSchema = new mongoose.Schema(
     nearestStation: {
       type: String,
       default: "",
+      required: true,
     },
     nearestStationDistance: {
       type: Number,
-      default: null,
+      default: 0,
+      required: true,
     },
     images: {
       type: [String],
@@ -50,12 +52,13 @@ const developmentSchema = new mongoose.Schema(
           type: String,
           required: true,
         },
-        lastUpdated: {
-          type: Date,
-          default: Date.now,
-        },
       },
     ],
+
+    priceListsLastUpdated: {
+      type: Date,
+      default: Date.now,
+    },
 
     zone: {
       type: Number,
@@ -119,6 +122,7 @@ const developmentSchema = new mongoose.Schema(
           required: true,
         },
       },
+
       lastUpdated: {
         type: Date,
         default: Date.now,
@@ -136,6 +140,11 @@ const developmentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
+    area: {
+      type: String,
+      default: "N/A",
+    },
     fee: {
       type: Number,
       required: true,
@@ -146,7 +155,7 @@ const developmentSchema = new mongoose.Schema(
       match: [/.+\@.+\..+/, "Please fill a valid email address"],
       required: true,
     },
-    completion: {
+    completionYear: {
       required: true,
       type: String,
     },
