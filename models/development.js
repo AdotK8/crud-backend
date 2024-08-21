@@ -66,6 +66,18 @@ const developmentSchema = new mongoose.Schema(
       required: true,
     },
     availability: {
+      zeroBed: {
+        available: {
+          type: Boolean,
+          required: true,
+        },
+        priceFrom: {
+          type: Number,
+          required: true,
+          default: 0,
+        },
+      },
+
       oneBed: {
         available: {
           type: Boolean,
