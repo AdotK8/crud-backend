@@ -1,4 +1,7 @@
-const Development = require("../models/development");
+const {
+  Development,
+  DeletedDevelopment,
+} = require("../models/developmentModels");
 const mongoose = require("mongoose");
 
 exports.createDevelopment = async (req, res) => {
@@ -46,7 +49,7 @@ exports.editDevelopment = async (req, res) => {
 
 exports.getDevelopments = async (req, res) => {
   try {
-    const developments = await Development.find({});
+    const developments = await Development.find({}).sort({ name: 1 });
     res.status(200).json(developments);
   } catch (error) {
     res.status(500).send("Error fetching developments: " + error.message);
@@ -72,13 +75,19 @@ exports.deleteDevelopment = async (req, res) => {
       return res.status(400).json({ error: "Invalid ID format." });
     }
 
-    const result = await Development.findByIdAndDelete(id);
+    const development = await Development.findById(id);
 
-    if (!result) {
+    if (!development) {
       return res.status(404).json({ error: "Development not found." });
     }
 
-    res.status(200).json({ message: "Development deleted successfully." });
+    await Development.findByIdAndDelete(id);
+
+    await DeletedDevelopment.create(development.toObject());
+
+    res
+      .status(200)
+      .json({ message: "Development deleted and archived successfully." });
   } catch (error) {
     res
       .status(500)

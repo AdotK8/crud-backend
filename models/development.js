@@ -21,6 +21,12 @@ const developmentSchema = new mongoose.Schema(
       maxlength: 350,
       default: "",
     },
+
+    emailCopy: {
+      type: String,
+      maxlength: 100,
+      default: "",
+    },
     features: {
       type: [String],
     },
@@ -177,4 +183,4 @@ const developmentSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Development", developmentSchema);
+module.exports = developmentSchema;
