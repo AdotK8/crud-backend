@@ -155,6 +155,11 @@ const developmentSchema = new mongoose.Schema(
       match: [/.+\@.+\..+/, "Please fill a valid email address"],
       required: true,
     },
+
+    completionQuarter: {
+      default: "N/A",
+      type: String,
+    },
     completionYear: {
       required: true,
       type: String,
