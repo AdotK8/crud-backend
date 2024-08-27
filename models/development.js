@@ -134,10 +134,17 @@ const developmentSchema = new mongoose.Schema(
         default: Date.now,
       },
     },
+
     postcode: {
       type: String,
       required: true,
     },
+
+    coords: {
+      type: [],
+      required: true,
+    },
+
     developer: {
       type: String,
       required: true,

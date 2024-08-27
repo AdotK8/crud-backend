@@ -94,3 +94,36 @@ exports.deleteDevelopment = async (req, res) => {
       .json({ error: "Error deleting development: " + error.message });
   }
 };
+
+exports.getCoordinates = async (req, res) => {
+  try {
+    const { postcode } = req.body;
+
+    if (!postcode || postcode.trim().length < 3) {
+      return res.status(400).send("Invalid postcode.");
+    }
+
+    const [postcodeOne, postcodeTwo] = postcode.split(" ");
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${postcodeOne}+${postcodeTwo}&key=${process.env.MAP_KEY}`;
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("Error fetching data from Google Maps API");
+    }
+
+    const data = await response.json();
+
+    if (data.status !== "OK" || data.results.length === 0) {
+      return res
+        .status(404)
+        .send("Coordinates not found for the provided postcode.");
+    }
+
+    const { lat, lng } = data.results[0].geometry.location;
+
+    res.json({ latitude: lat, longitude: lng });
+  } catch (error) {
+    res.status(500).send("Error fetching postcode: " + error.message);
+  }
+};
