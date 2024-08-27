@@ -57,6 +57,20 @@ exports.getDevelopments = async (req, res) => {
   }
 };
 
+exports.getMappingInfo = async (req, res) => {
+  try {
+    const developments = await Development.find({}).select({
+      _id: 1,
+      name: 1,
+      coords: 1,
+      completionYear: 1,
+    });
+    res.status(200).json(developments);
+  } catch (error) {
+    res.status(500).send("Error fetching developments: " + error.message);
+  }
+};
+
 exports.getOneDevelopment = async (req, res) => {
   try {
     const { id } = req.params;
