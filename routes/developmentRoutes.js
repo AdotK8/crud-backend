@@ -1,22 +1,25 @@
 const express = require("express");
 const router = express.Router();
 const developmentController = require("../controllers/developmentController");
-const emailController = require("../controllers/emailController");
+const valuationController = require("../controllers/valuationController");
 
-// Development routes
+// DEVELOPMENT ROUTES
 router.post("/developments/add", developmentController.createDevelopment);
 router.get("/developments/get", developmentController.getDevelopments);
 router.get("/developments/get/:id", developmentController.getOneDevelopment);
 router.post("/developments/mod", developmentController.editDevelopment);
 router.delete("/developments/:id", developmentController.deleteDevelopment);
-
-// Coordinates routes
-router.post("/developments/coords", developmentController.getCoordinates); // For POST requests to update or add coordinates
-
-// Mapping info route
+router.post("/developments/coords", developmentController.getCoordinates);
 router.get("/developments/mapping/get", developmentController.getMappingInfo);
+router.post("/developments/send-email", developmentController.sendMatchEmail);
 
-// Email route
-router.post("/developments/send-email", emailController.sendMatchEmail);
+// VALUATION ROUTES
+router.post("/valuation/send-email-full", valuationController.sendEmailFull);
+router.post("/valuation/send-email-sale", valuationController.sendEmailSale);
+router.post(
+  "/valuation/send-email-internal",
+  valuationController.sendEmailInternalFail
+);
+router.post("/valuation/book-val", valuationController.sendEmailBookVal);
 
 module.exports = router;
