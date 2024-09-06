@@ -4,7 +4,6 @@ const {
 } = require("../models/developmentModels");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
-const http = require("http");
 
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -289,7 +288,7 @@ const sendNotificationEmailCreation = async (development) => {
 const sendNotificationEmailDelete = async (development) => {
   const emailBody = `
     <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-      <p>A new development has been deleted from the database.</p>
+      <p>A development has been deleted from the database.</p>
       <p><strong>Name:</strong> ${development.name}</p>
     </div>
   `;
@@ -297,7 +296,7 @@ const sendNotificationEmailDelete = async (development) => {
   const mailOptions = {
     from: `Yase Property <${process.env.EMAIL_ADDRESS}>`,
     to: process.env.NOTIFICATION_EMAIL,
-    subject: "New Development Added",
+    subject: "Development Deleted",
     html: emailBody,
   };
 
