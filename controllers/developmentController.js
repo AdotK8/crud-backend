@@ -6,13 +6,24 @@ const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
 const http = require("http");
 
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: true,
+  auth: {
+    user: process.env.EMAIL_ADDRESS,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
+
 exports.createDevelopment = async (req, res) => {
   req.body.zone = Number(req.body.zone);
   req.body.fee = Number(req.body.fee);
   try {
     const development = new Development(req.body);
     await development.save();
-
+    await sendNotificationEmailCreation(development);
     res.status(201).send(development);
   } catch (error) {
     res.status(400).send("Error creating development: " + error.message);
@@ -98,8 +109,10 @@ exports.deleteDevelopment = async (req, res) => {
     }
 
     await Development.findByIdAndDelete(id);
-
     await DeletedDevelopment.create(development.toObject());
+
+    // Send deletion notification email
+    await sendNotificationEmailDelete(development);
 
     res
       .status(200)
@@ -253,4 +266,40 @@ exports.sendMatchEmail = async (req, res) => {
     console.error("Error sending email:", error);
     res.status(500).json({ message: "Error sending email: " + error.message });
   }
+};
+
+const sendNotificationEmailCreation = async (development) => {
+  const emailBody = `
+    <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+      <p>A new development has been added to the database.</p>
+      <p><strong>Name:</strong> ${development.name}</p>
+    </div>
+  `;
+
+  const mailOptions = {
+    from: `Yase Property <${process.env.EMAIL_ADDRESS}>`,
+    to: process.env.NOTIFICATION_EMAIL,
+    subject: "New Development Added",
+    html: emailBody,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
+const sendNotificationEmailDelete = async (development) => {
+  const emailBody = `
+    <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+      <p>A new development has been deleted from the database.</p>
+      <p><strong>Name:</strong> ${development.name}</p>
+    </div>
+  `;
+
+  const mailOptions = {
+    from: `Yase Property <${process.env.EMAIL_ADDRESS}>`,
+    to: process.env.NOTIFICATION_EMAIL,
+    subject: "New Development Added",
+    html: emailBody,
+  };
+
+  await transporter.sendMail(mailOptions);
 };

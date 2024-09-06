@@ -11,7 +11,10 @@ router.post("/developments/mod", developmentController.editDevelopment);
 router.delete("/developments/:id", developmentController.deleteDevelopment);
 router.post("/developments/coords", developmentController.getCoordinates);
 router.get("/developments/mapping/get", developmentController.getMappingInfo);
-router.post("/developments/send-email", developmentController.sendMatchEmail);
+router.post(
+  "/developments/send-match-email",
+  developmentController.sendMatchEmail
+);
 
 // VALUATION ROUTES
 router.post("/valuation/send-email-full", valuationController.sendEmailFull);
