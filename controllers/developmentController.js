@@ -30,16 +30,27 @@ exports.createDevelopment = async (req, res) => {
 };
 
 exports.editDevelopment = async (req, res) => {
-  console.log(req.body);
-
   const { _id, ...updateFields } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(_id)) {
     return res.status(400).json({ message: "Invalid ID format" });
   }
 
-  updateFields.zone = Number(updateFields.zone);
-  updateFields.fee = Number(updateFields.fee);
+  if (updateFields.zone !== undefined) {
+    const zone = Number(updateFields.zone);
+    if (isNaN(zone)) {
+      return res.status(400).json({ message: "Invalid zone value" });
+    }
+    updateFields.zone = zone;
+  }
+
+  if (updateFields.fee !== undefined) {
+    const fee = Number(updateFields.fee);
+    if (isNaN(fee)) {
+      return res.status(400).json({ message: "Invalid fee value" });
+    }
+    updateFields.fee = fee;
+  }
 
   try {
     const updatedDevelopment = await Development.findByIdAndUpdate(
@@ -54,11 +65,9 @@ exports.editDevelopment = async (req, res) => {
 
     res.status(200).json(updatedDevelopment);
   } catch (error) {
-    console.error("Error updating development:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
-
 exports.getDevelopments = async (req, res) => {
   try {
     const developments = await Development.find({}).sort({ name: 1 });
@@ -87,6 +96,11 @@ exports.getOneDevelopment = async (req, res) => {
   try {
     const { id } = req.params;
     const development = await Development.findById(id).exec();
+
+    if (!development) {
+      return res.status(404).json({ message: "Development not found" });
+    }
+
     res.status(200).json(development);
   } catch (error) {
     res.status(500).send("Error fetching development: " + error.message);

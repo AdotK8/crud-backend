@@ -4,12 +4,12 @@ const developmentController = require("../controllers/developmentController");
 const valuationController = require("../controllers/valuationController");
 
 // DEVELOPMENT ROUTES
-router.post("/developments/add", developmentController.createDevelopment);
-router.get("/developments/get", developmentController.getDevelopments);
-router.get("/developments/get/:id", developmentController.getOneDevelopment);
-router.post("/developments/mod", developmentController.editDevelopment);
-router.delete("/developments/:id", developmentController.deleteDevelopment);
-router.post("/developments/coords", developmentController.getCoordinates);
+router.post("/developments/add", developmentController.createDevelopment); // test done
+router.get("/developments/get", developmentController.getDevelopments); // test done
+router.get("/developments/get/:id", developmentController.getOneDevelopment); // test done
+router.post("/developments/mod", developmentController.editDevelopment); // test done
+router.delete("/developments/:id", developmentController.deleteDevelopment); // test done
+
 router.get("/developments/mapping/get", developmentController.getMappingInfo);
 router.post(
   "/developments/send-match-email",

@@ -12,7 +12,7 @@ const port = process.env.PORT || 3000;
 
 connectDB()
   .then(() => {
-    app.listen(port, () => {
+    server = app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
   })
@@ -24,3 +24,5 @@ connectDB()
   });
 
 app.use("/api", developmentRoutes);
+
+module.exports = app;
