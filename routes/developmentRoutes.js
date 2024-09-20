@@ -9,8 +9,7 @@ router.get("/developments/get", developmentController.getDevelopments); // test 
 router.get("/developments/get/:id", developmentController.getOneDevelopment); // test done
 router.post("/developments/mod", developmentController.editDevelopment); // test done
 router.delete("/developments/:id", developmentController.deleteDevelopment); // test done
-
-router.get("/developments/mapping/get", developmentController.getMappingInfo);
+router.get("/developments/mapping/get", developmentController.getMappingInfo); // test done
 router.post(
   "/developments/send-match-email",
   developmentController.sendMatchEmail

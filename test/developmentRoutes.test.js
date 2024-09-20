@@ -3,8 +3,21 @@ const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const app = require("../index");
 const { Development } = require("../models/developmentModels");
+const nodemailer = require("nodemailer");
+
+jest.mock("nodemailer");
 
 let mongoServer;
+
+jest.mock("nodemailer", () => {
+  return {
+    createTransport: jest.fn(() => {
+      return {
+        sendMail: jest.fn().mockResolvedValue({}),
+      };
+    }),
+  };
+});
 
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
@@ -59,10 +72,9 @@ describe("POST /api/developments/add", () => {
       .post("/api/developments/add")
       .send(developmentData);
 
-    expect(response.statusCode).toBe(201); // Assuming creation returns 201
+    expect(response.statusCode).toBe(201);
     expect(response.body).toHaveProperty("name", developmentData.name);
 
-    // Ensure the development was saved in the database
     const savedDevelopment = await Development.findOne({
       name: developmentData.name,
     });
@@ -84,7 +96,6 @@ describe("GET /developments/get/:id", () => {
   let developmentId;
 
   beforeEach(async () => {
-    // Seed a development record to the database
     const development = new Development({
       name: `Test Development 2`,
       landingPage: true,
@@ -126,7 +137,7 @@ describe("GET /developments/get/:id", () => {
   });
 
   it("should return a 404 error if the development is not found", async () => {
-    const nonExistentId = new mongoose.Types.ObjectId(); // Generate a new random ObjectId
+    const nonExistentId = new mongoose.Types.ObjectId();
     const response = await request(app).get(
       `/api/developments/get/${nonExistentId}`
     );
@@ -282,5 +293,126 @@ describe("DELETE /api/developments/:id", () => {
 
     expect(response.statusCode).toBe(404);
     expect(response.body).toHaveProperty("error", "Development not found.");
+  });
+});
+
+describe("GET /api/developments/mapping/get", () => {
+  beforeEach(async () => {
+    await Development.create([
+      {
+        name: `Mapping Test Development 1`,
+        landingPage: true,
+        nearestStation: "Test Station",
+        nearestStationDistance: 1.2,
+        brochures: ["test-brochure.pdf"],
+        zone: 2,
+        parking: true,
+        availability: {
+          zeroBed: { available: true, priceFrom: 300000 },
+          oneBed: { available: true, priceFrom: 400000 },
+          twoBed: { available: true, priceFrom: 500000 },
+          threeBed: { available: true, priceFrom: 600000 },
+          fourPlusBed: { available: true, priceFrom: 700000 },
+          lastUpdated: new Date(),
+        },
+        postcode: "E1 1AA",
+        coords: [51.509865, -0.118092],
+        developer: "Test Developer",
+        cardinalLocation: "North",
+        fee: 2.5,
+        contactEmail: "test@example.com",
+        completionYear: "2025",
+      },
+      {
+        name: `Mapping Test Development 2`,
+        landingPage: true,
+        nearestStation: "Test Station",
+        nearestStationDistance: 1.2,
+        brochures: ["test-brochure.pdf"],
+        zone: 2,
+        parking: true,
+        availability: {
+          zeroBed: { available: true, priceFrom: 300000 },
+          oneBed: { available: true, priceFrom: 400000 },
+          twoBed: { available: true, priceFrom: 500000 },
+          threeBed: { available: true, priceFrom: 600000 },
+          fourPlusBed: { available: true, priceFrom: 700000 },
+          lastUpdated: new Date(),
+        },
+        postcode: "E1 1AA",
+        coords: [51.509865, -0.118092],
+        developer: "Test Developer",
+        cardinalLocation: "North",
+        fee: 2.5,
+        contactEmail: "test@example.com",
+        completionYear: "2025",
+      },
+    ]);
+  });
+
+  it("should return mapping information for all developments", async () => {
+    const response = await request(app).get("/api/developments/mapping/get");
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toBeInstanceOf(Array);
+
+    response.body.forEach((development) => {
+      expect(development).toHaveProperty("coords");
+    });
+
+    expect(response.body.length).toBe(2);
+  });
+
+  it("should return an empty array if there are no developments", async () => {
+    await Development.deleteMany();
+    const response = await request(app).get("/api/developments/mapping/get");
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual([]);
+  });
+});
+
+describe("POST /api/developments/send-match-email", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+  it("should send a match email successfully", async () => {
+    const requestBody = {
+      selection: [
+        {
+          name: `Test Development 1`,
+          landingPage: true,
+          nearestStation: "Test Station",
+          nearestStationDistance: 1.2,
+          brochures: ["test-brochure.pdf"],
+          zone: 2,
+          parking: true,
+          availability: {
+            zeroBed: { available: true, priceFrom: 300000 },
+            oneBed: { available: true, priceFrom: 400000 },
+            twoBed: { available: true, priceFrom: 500000 },
+            threeBed: { available: true, priceFrom: 600000 },
+            fourPlusBed: { available: true, priceFrom: 700000 },
+            lastUpdated: new Date(),
+          },
+          postcode: "E1 1AA",
+          coords: [51.509865, -0.118092],
+          developer: "Test Developer",
+          cardinalLocation: "North",
+          fee: 2.5,
+          contactEmail: "test@example.com",
+          completionYear: "2025",
+        },
+      ],
+      email: "test@example.com",
+      name: "John Doe",
+    };
+
+    const response = await request(app)
+      .post("/api/developments/send-match-email")
+      .send(requestBody);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty("message", "Email sent successfully!");
+    expect(nodemailer.createTransport).toHaveBeenCalled();
   });
 });
