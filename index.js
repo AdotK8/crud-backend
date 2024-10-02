@@ -8,6 +8,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+app.use("/api", developmentRoutes);
+
 const port = process.env.PORT || 3000;
 
 connectDB()
@@ -22,7 +24,5 @@ connectDB()
       error
     );
   });
-
-app.use("/api", developmentRoutes);
 
 module.exports = app;
