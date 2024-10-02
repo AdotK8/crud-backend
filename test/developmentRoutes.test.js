@@ -2,8 +2,14 @@ const request = require("supertest");
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const app = require("../index");
+const fetch = require("node-fetch");
 const { Development } = require("../models/developmentModels");
 const nodemailer = require("nodemailer");
+require("jest-fetch-mock").enableMocks();
+
+require("dotenv").config();
+
+jest.mock("node-fetch", () => require("jest-fetch-mock"));
 
 jest.mock("nodemailer");
 

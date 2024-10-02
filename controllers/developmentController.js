@@ -142,9 +142,8 @@ exports.getCoordinates = async (req, res) => {
     const { postcode } = req.body;
 
     if (!postcode || postcode.trim().length < 3) {
-      return res.status(400).send("Invalid postcode.");
+      return res.status(400).json({ error: "Invalid postcode." });
     }
-
     const [postcodeOne, postcodeTwo] = postcode.split(" ");
     const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${postcodeOne}+${postcodeTwo}&key=${process.env.MAP_KEY}`;
 
@@ -155,21 +154,26 @@ exports.getCoordinates = async (req, res) => {
     }
 
     const data = await response.json();
-
     if (data.status !== "OK" || data.results.length === 0) {
       return res
         .status(404)
-        .send("Coordinates not found for the provided postcode.");
+        .send(
+          "Coordinates not found for the provided postcode, please try another postcode"
+        );
     }
 
     const { lat, lng } = data.results[0].geometry.location;
-
-    res.json({ latitude: lat, longitude: lng });
+    return res.status(200).json({ latitude: lat, longitude: lng });
   } catch (error) {
-    res.status(500).send("Error fetching postcode: " + error.message);
+    const errorMessage =
+      typeof error === "object" && error !== null && "message" in error
+        ? error.message
+        : String(error);
+    return res
+      .status(500)
+      .json({ error: "Error fetching postcode: " + errorMessage });
   }
 };
-
 exports.sendMatchEmail = async (req, res) => {
   const { selection, email, name } = req.body;
 

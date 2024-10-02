@@ -49,7 +49,6 @@ const developmentSchema = new mongoose.Schema(
 
     brochures: {
       type: [String],
-      required: true,
     },
 
     priceLists: [

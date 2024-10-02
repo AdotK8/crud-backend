@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 const connectDB = async () => {
   if (process.env.NODE_ENV === "test") {
-    // Skip the connection to the real database during tests
+    // Skipping connection to the real database during testing
     return;
   }
   const uri = process.env.MONGODB_URI;
