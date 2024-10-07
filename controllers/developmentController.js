@@ -139,7 +139,6 @@ exports.deleteDevelopment = async (req, res) => {
 
 exports.getCoordinates = async (req, res) => {
   try {
-    console.log(postcode);
     const { postcode } = req.body;
 
     if (!postcode || postcode.trim().length < 3) {
