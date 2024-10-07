@@ -8,6 +8,7 @@
 Technologies used:
 
 - Node.js
+- Express
 - MongoDB
 - Mongoose
 - GoogleMaps API
