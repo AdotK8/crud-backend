@@ -7,8 +7,8 @@ const app = express();
 
 app.use(express.json());
 const allowedOrigins = [
-  "https://yase-databae.netlify.app/",
-  "https://yase-valuation.netlify.app/",
+  "https://yase-databae.netlify.app",
+  "https://yase-valuation.netlify.app",
   "https://www.yaseproperty.com/freeappraisal",
 ];
 
@@ -24,6 +24,8 @@ app.use(
     },
   })
 );
+
+app.options("*", cors());
 
 app.use("/api", developmentRoutes);
 
