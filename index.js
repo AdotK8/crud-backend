@@ -6,7 +6,24 @@ const developmentRoutes = require("./routes/developmentRoutes");
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+const allowedOrigins = [
+  "https://yase-databae.netlify.app/",
+  "https://yase-valuation.netlify.app/",
+  "https://www.yaseproperty.com/freeappraisal",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) === -1) {
+        return callback(new Error("Not allowed by CORS"));
+      }
+      return callback(null, true);
+    },
+  })
+);
 
 app.use("/api", developmentRoutes);
 
