@@ -10,6 +10,7 @@ const allowedOrigins = [
   "https://yase-databae.netlify.app",
   "https://yase-valuation.netlify.app",
   "https://www.yaseproperty.com/freeappraisal",
+  "http://localhost:5173", //for testing purposes
 ];
 
 app.use(
