@@ -191,11 +191,11 @@ exports.sendMatchEmail = async (req, res) => {
 
     const emailBody = `
       <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-        <p>Hi,</p>
+        <p>Hi [Recipient's Name],,</p>
 
-        <p>I hope this email finds you well and thank you for your time the other day.</p>
+        <p>I hope this email finds you well, and thank you again for your time the other day. It was great discussing your preferences and requirements.</p>
 
-        <p>I have put together some options of properties for you to consider. Please have a look at the information below as well as the attachment links for brochures and pricing information.</p>
+        <p>Based on your specific preferences, I’ve carefully selected a range of properties that meet your needs in terms of location, amenities, and convenience. Below are the details for each option, Below are the details for each option, along with the relevant attachments. </p>
 
         ${selection
           .map((dev) => {
@@ -261,7 +261,9 @@ exports.sendMatchEmail = async (req, res) => {
           })
           .join("")}
 
-        <p>Once you have reviewed these options, do let me know your thoughts. I am happy to arrange for you to come on a viewing and see the properties in person.</p>
+        <p>As a buying agency in London, we help our clients obtain exclusive access to off-market plots, provide full transparency on available discounts, and negotiate on your behalf to secure the best possible deal.</p>
+        
+        <p>Once you’ve had a chance to review these options, feel free to share your thoughts. I’d be more than happy to arrange an in person viewing, or explore other opportunities to find the perfect property for you.</p>
 
         <p>Have a great day.</p>
 
