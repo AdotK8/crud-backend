@@ -191,7 +191,7 @@ exports.sendMatchEmail = async (req, res) => {
 
     const emailBody = `
       <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-        <p>Hi [Recipient's Name],,</p>
+        <p>Hi [Recipient's Name],</p>
 
         <p>I hope this email finds you well, and thank you again for your time the other day. It was great discussing your preferences and requirements.</p>
 
