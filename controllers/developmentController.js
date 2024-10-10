@@ -195,7 +195,7 @@ exports.sendMatchEmail = async (req, res) => {
 
         <p>I hope this email finds you well, and thank you again for your time the other day. It was great discussing your preferences and requirements.</p>
 
-        <p>Based on your specific preferences, I’ve carefully selected a range of properties that meet your needs in terms of location, amenities, and convenience. Below are the details for each option, Below are the details for each option, along with the relevant attachments. </p>
+        <p>Based on your specific preferences, I’ve carefully selected a range of properties that meet your needs in terms of location, amenities, and convenience. Below are the details for each option, along with the relevant attachments. </p>
 
         ${selection
           .map((dev) => {
