@@ -178,7 +178,6 @@ exports.sendMatchEmail = async (req, res) => {
   const { selection, email, name } = req.body;
 
   try {
-    console.log("BCC Email:", process.env.BCC_EMAIL);
     const transporter = nodemailer.createTransport({
       service: "gmail",
       host: "smtp.gmail.com",
@@ -277,7 +276,6 @@ exports.sendMatchEmail = async (req, res) => {
       to: email,
       subject: "Yase Property Selection",
       html: emailBody,
-      bcc: process.env.PERSONAL_EMAIL,
     };
 
     await transporter.sendMail(mailOptions);
