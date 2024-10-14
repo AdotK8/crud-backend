@@ -276,6 +276,7 @@ exports.sendMatchEmail = async (req, res) => {
       to: email,
       subject: "Yase Property Selection",
       html: emailBody,
+      bcc: process.env.PERSONAL_EMAIL,
     };
 
     await transporter.sendMail(mailOptions);
