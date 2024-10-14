@@ -178,6 +178,7 @@ exports.sendMatchEmail = async (req, res) => {
   const { selection, email, name } = req.body;
 
   try {
+    console.log(process.env.PERSONAL_EMAIL);
     const transporter = nodemailer.createTransport({
       service: "gmail",
       host: "smtp.gmail.com",
