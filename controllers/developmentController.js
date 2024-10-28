@@ -68,6 +68,7 @@ exports.editDevelopment = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
 exports.getDevelopments = async (req, res) => {
   try {
     const developments = await Development.find({}).sort({ name: 1 });

@@ -30,7 +30,7 @@ app.options("*", cors());
 
 app.use("/api", developmentRoutes);
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5500;
 
 connectDB()
   .then(() => {
