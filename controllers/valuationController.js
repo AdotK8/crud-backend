@@ -36,6 +36,7 @@ exports.sendEmailFull = async (req, res) => {
     };
 
     await transporter.sendMail(mailOptions);
+    await sendInternalEmail(userInput);
 
     res.status(200).json({ message: "Email sent successfully!" });
   } catch (error) {
@@ -68,6 +69,7 @@ exports.sendEmailSale = async (req, res) => {
     };
 
     await transporter.sendMail(mailOptions);
+    await sendInternalEmail(userInput);
 
     res.status(200).json({ message: "Email sent successfully!" });
   } catch (error) {
@@ -125,5 +127,27 @@ exports.sendEmailBookVal = async (req, res) => {
   } catch (error) {
     console.error("Error sending email:", error);
     res.status(500).json({ message: "Error sending email: " + error.message });
+  }
+};
+
+const sendInternalEmail = async (userInput) => {
+  try {
+    const internalEmailBody = `<p>Following client has used property valuation calculator:</p>
+      <p>Full name: ${userInput.firstName} ${userInput.secondNameInput}</p>
+      <p>Email address: ${userInput.emailInput} </p>
+      <p>Number: ${userInput.phoneInput} </p>
+      <p>Postcode: ${userInput.postcode} </p>`;
+
+    const internalMailOptions = {
+      from: `Yase Property <${process.env.EMAIL_ADDRESS}>`,
+      to: process.env.EMAIL_ADDRESS, // Your internal email address
+      subject: "Client has used property valuation calculator",
+      html: internalEmailBody,
+    };
+
+    await transporter.sendMail(internalMailOptions);
+  } catch (error) {
+    console.error("Error sending internal email:", error);
+    throw new Error("Error sending internal email: " + error.message);
   }
 };

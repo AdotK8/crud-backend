@@ -20,7 +20,7 @@ router.post(
 router.post("/valuation/send-email-full", valuationController.sendEmailFull);
 router.post("/valuation/send-email-sale", valuationController.sendEmailSale);
 router.post(
-  "/valuation/send-email-internal",
+  "/valuation/send-email-internal-fail",
   valuationController.sendEmailInternalFail
 );
 router.post("/valuation/book-val", valuationController.sendEmailBookVal);
